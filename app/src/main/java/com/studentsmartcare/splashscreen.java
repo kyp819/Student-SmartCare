@@ -14,6 +14,7 @@ public class splashscreen extends AppCompatActivity {
     private ImageView imageView1, imageView2, imageView3, imageView4;
     private EditText editTextText;
 
+    //this is a splash screen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
