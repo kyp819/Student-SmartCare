@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.studentsmartcare.R;
 import com.studentsmartcare.DashBoard;
+import com.studentsmartcare.SessionManager;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -54,12 +55,19 @@ public class LoginPage extends AppCompatActivity {
     private ImageButton googleButton;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
+    private SessionManager sessionManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager(this);
+        if (sessionManager.isLoggedIn()) {
+            // Redirect to the dashboard or another relevant screen
+            startActivity(new Intent(getApplicationContext(), DashBoard.class));
+            finish(); // Optionally finish the login activity
+        }
         setContentView(R.layout.activity_login_page);
 
         initializeViews();

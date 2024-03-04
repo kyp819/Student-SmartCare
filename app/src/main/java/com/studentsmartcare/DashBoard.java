@@ -44,6 +44,7 @@ public class DashBoard extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sessionManager = new SessionManager(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
 

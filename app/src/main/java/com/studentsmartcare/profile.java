@@ -97,8 +97,11 @@ public class profile extends AppCompatActivity {
         fAuth.signOut();
         Toast.makeText(profile.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
         // Clear session and redirect to loginPage
+
         sessionManager.logout();
-        startActivity(new Intent(getApplicationContext(), LoginPage.class));
+        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
     }
 
