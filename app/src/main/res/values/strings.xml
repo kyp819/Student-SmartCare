@@ -1,0 +1,126 @@
+<resources>
+    <string name="app_name">Student SmartCare</string>
+    <string name="email">Email</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">LogIn</string>
+    <string name="don_t_have_an_account_register_now">Don’t have an account? Register Now</string>
+    <string name="welcome_login_here">Welcome \nLogin Here</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password">Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="instagram">Instagram</string>
+    <string name="create_account">Create Account</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="hello_user">Hello, User!</string>
+    <string name="welcome_to_smart_student_care">Welcome to Smart Student Care!</string>
+    <string name="home">HOME</string>
+    <string name="ride">RIDE</string>
+    <string name="bus">BUS</string>
+    <string name="logout">LogOut</string>
+    <string name="buy_sell">BUY/SELL</string>
+    <string name="buysell">BuySell</string>
+    <string name="book_name">Book Name</string>
+    <string name="seller_name">Seller Name</string>
+    <string name="more_info">More Info</string>
+    <string name="book_now">Book Now</string>
+    <string name="enter_the_email_below_to_reset_your_password">Enter the email below to reset \n your password</string>
+    <string name="forgot_password1">FORGOT PASSWORD</string>
+    <string name="reset">Reset</string>
+
+    <string-array name="array">
+        <item>Student</item>
+        <item>Service Provider</item>
+    </string-array>
+
+
+    //car Array
+    <string-array name="ownerNames">
+        <item>Sushant Dhakal</item>
+        <item>Nikunj Thakor</item>
+        <item>Kirtan Patel</item>
+        <item>Yash Patel</item>
+        <item>Random Guy</item>
+    </string-array>
+    <string-array name="route">
+        <item>Toronto-Ottawa</item>
+        <item>Barrie-Toronto</item>
+        <item>Bramton-Barrie </item>
+        <item>Montreal-Ottowa</item>
+        <item>Kitchener-Barrie</item>
+
+    </string-array>
+
+    <string-array name="carModels">
+        <item>Chevrolet</item>
+        <item>Hyundai</item>
+        <item>BMW</item>
+        <item>Audi</item>
+        <item>Ferrari</item>
+    </string-array>
+
+    <string-array name="carNumbers">
+        <item>CRMA 707</item>
+        <item>XYZA 456</item>
+        <item>BWER 765</item>
+        <item>JKRL 564</item>
+        <item>FUY3 435</item>
+    </string-array>
+
+    //home Array
+    <string-array name="homeOwner">
+        <item>Sushant Dhakal</item>
+        <item>Nikunj Thakor</item>
+        <item>Kirtan Patel</item>
+        <item>Yash Patel</item>
+        <item>Random Guy</item>
+    </string-array>
+
+    <string-array name="location">
+        <item>Barrie</item>
+        <item>Toronto</item>
+        <item>Ottowa</item>
+        <item>Vancouver</item>
+        <item>London</item>
+    </string-array>
+
+    <string-array name="contactNumber">
+        <item>+124–5678-9899</item>
+        <item>+1249-734-5627</item>
+        <item>+1487-652-0867</item>
+        <item>+1389-467-29647</item>
+        <item>+1234-678-4539</item>
+    </string-array>
+
+    //BuySell Array
+
+    <string-array name="bookName">
+        <item>Physics</item>
+        <item>Mathematics</item>
+        <item>Computer Science</item>
+        <item>Chemistry</item>
+        <item>General</item>
+    </string-array>
+
+    <string-array name="sellerName">
+        <item>Sushant Dhakal</item>
+        <item>Nikunj Thankor</item>
+        <item>Kirtan Patel</item>
+        <item>Yash Patel</item>
+        <item>Random Guy</item>
+    </string-array>
+
+    <string-array name="contactNumSeller">
+        <item>+124–5678-9899</item>
+        <item>+1249-734-5627</item>
+        <item>+1487-652-0867</item>
+        <item>+1389-467-29647</item>
+        <item>+1234-678-4539</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="CarCardView.carCardPopUp">
+
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_margin="30dp"
+            android:background="@drawable/rectanglebackground"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/sellerName"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@android:color/transparent"
+                    android:text="Seller Name"
+                    android:textSize="20sp"
+                    android:textColor="@color/navyBlue"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/sellerNameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sushant Dhakal"
+                    android:textColor="@color/navyBlue"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/sellerName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.70"
+                    app:layout_constraintStart_toEndOf="@id/sellerName"
+                    app:layout_constraintTop_toTopOf="@id/sellerName"
+                    >
+
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/routeRide"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@android:color/transparent"
+                    android:text="Route"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/navyBlue"
+
+                    app:layout_constraintTop_toBottomOf="@id/sellerName">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/bookNameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Toronto-Ottowa"
+                    android:textColor="@color/navyBlue"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/routeRide"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.708"
+                    app:layout_constraintStart_toEndOf="@id/routeRide"
+                    app:layout_constraintTop_toBottomOf="@id/sellerName"
+                    app:layout_constraintVertical_bias="0.0">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@android:color/transparent"
+                    android:text="Address"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/navyBlue"
+
+                    app:layout_constraintTop_toBottomOf="@id/routeRide">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/addressText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Toronto,ON"
+                    android:textColor="@color/navyBlue"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/address"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.458"
+                    app:layout_constraintStart_toEndOf="@id/address"
+                    app:layout_constraintTop_toBottomOf="@id/routeRide"
+                    app:layout_constraintVertical_bias="1.0">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/carModelPopUp"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@android:color/transparent"
+                    android:text="Car Model"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/navyBlue"
+
+                    app:layout_constraintTop_toBottomOf="@id/address">
+
+
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/carModelName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cheverolet"
+                    android:textColor="@color/navyBlue"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/carModelPopUp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.443"
+                    app:layout_constraintStart_toEndOf="@id/carModelPopUp"
+                    app:layout_constraintTop_toBottomOf="@id/address"
+                    app:layout_constraintVertical_bias="0.0">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/carNumber"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Car Number"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/navyBlue"
+                    app:layout_constraintTop_toBottomOf="@id/carModelPopUp">
+
+
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/carNumberText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CRMA 7747"
+                    android:textColor="@color/navyBlue"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/carNumber"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.443"
+                    app:layout_constraintStart_toEndOf="@id/carNumber"
+                    app:layout_constraintTop_toBottomOf="@id/carModelPopUp"
+                    app:layout_constraintVertical_bias="0.0">
+
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@android:color/transparent"
+                    android:text="Price"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/navyBlue"
+
+                    app:layout_constraintTop_toBottomOf="@id/carNumber">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/priceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CAD 20"
+                    android:textColor="@color/navyBlue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/price"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.349"
+                    app:layout_constraintStart_toEndOf="@id/price"
+                    app:layout_constraintTop_toBottomOf="@id/carNumber"
+                    app:layout_constraintVertical_bias="0.0">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/detailBook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/transparent"
+                    android:text="Details"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/navyBlue"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/price" />
+
+                <TextView
+                    android:id="@+id/detailsText"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:text="I am driving tomorrow at 8:AM from Toronto to Ottawa."
+                    android:textColor="@color/navyBlue"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"                app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/detailBook" />
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="84dp"
+                    android:background="@color/navyBlue"
+                    android:text="Book Now"
+                    style="@style/Widget.AppCompat.ActionButton"
+                    android:textColor="@color/white"
+
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detailsText">
+
+                </Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+

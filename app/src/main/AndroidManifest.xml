@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.studentsmartcare">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.StudentSmartCare"
+        tools:targetApi="31">
+        <activity
+            android:name=".splashscreen"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="HomeCardView.homeCardPopUp"
+            android:exported="false" />
+        <activity
+            android:name="CarCardView.carCardPopUp"
+            android:exported="false" />
+        <activity
+            android:name="SellerContents.SellerDashBoard"
+            android:exported="false" />
+        <activity
+            android:name="Authentication.ForgetPassword"
+            android:exported="false" />
+        <activity
+            android:name="BuySell.BuysellRecyclerActivity"
+            android:exported="false" />
+        <activity
+            android:name="HomeCardView.HomeRecyclerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".profile"
+            android:exported="false" /> <!-- Launcher Activity -->
+        <activity
+            android:name="Authentication.LoginPage"
+            android:exported="true">
+
+        </activity> <!-- Other Activities -->
+        <activity
+            android:name=".DashBoard"
+            android:exported="true" />
+        <activity
+            android:name="Authentication.RegisterPage"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name="CarCardView.CarRecyclerActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>
