@@ -47,6 +47,7 @@ public class DashBoard extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
+        sessionManager = new SessionManager(this);
 
         initializeViews();
         firebaseInstances();

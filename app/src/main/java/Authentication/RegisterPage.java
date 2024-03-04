@@ -29,7 +29,7 @@ import java.util.Objects;
 public class RegisterPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     //creating variables
-    private EditText emailId, password, confirmPassword, fullName;
+    private EditText emailId, password, confirmPassword, fullName, contactNumber;
     private Button signUpButton;
     private TextView alreadyAccount;
     private Spinner spinnerItem;
@@ -73,6 +73,7 @@ public class RegisterPage extends AppCompatActivity implements AdapterView.OnIte
         alreadyAccount = findViewById(R.id.alreadyAccount);
         fullName = findViewById(R.id.fullName);
         spinnerItem = findViewById(R.id.spinner);
+        contactNumber = findViewById(R.id.phoneNumber);
 
     }
 
@@ -86,6 +87,7 @@ public class RegisterPage extends AppCompatActivity implements AdapterView.OnIte
         String fullNameRegistered = fullName.getText().toString().trim();
         String confirmPasswordField = confirmPassword.getText().toString().trim();
         String spinnerField = spinnerItem.getSelectedItem().toString();
+        String phoneNumberField = confirmPassword.getText().toString().trim();
 
 
         if (TextUtils.isEmpty(emailField)) {
@@ -104,6 +106,10 @@ public class RegisterPage extends AppCompatActivity implements AdapterView.OnIte
             confirmPassword.setError("Password does not match");
             return;
         }
+        if (TextUtils.isEmpty(phoneNumberField)) {
+            password.setError("Password field is required");
+            return;
+        }
 
         fAuth.createUserWithEmailAndPassword(emailField, passwordField)
                 .addOnCompleteListener(task -> {
@@ -117,6 +123,7 @@ public class RegisterPage extends AppCompatActivity implements AdapterView.OnIte
                         user.put("fullNameUser", fullNameRegistered);
                         user.put("confirmPasswordUser", confirmPasswordField);
                         user.put("spinnerItemSelected", spinnerField);
+                        user.put("phoneNumber", phoneNumberField);
 
                         dReference.set(user).addOnSuccessListener(aVoid ->
                                         Log.d("RegisterPage", "Data write operation successful"))
