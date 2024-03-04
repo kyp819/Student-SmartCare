@@ -87,7 +87,7 @@ public class RegisterPage extends AppCompatActivity implements AdapterView.OnIte
         String fullNameRegistered = fullName.getText().toString().trim();
         String confirmPasswordField = confirmPassword.getText().toString().trim();
         String spinnerField = spinnerItem.getSelectedItem().toString();
-        String phoneNumberField = confirmPassword.getText().toString().trim();
+        String phoneNumberField = contactNumber.getText().toString().trim();
 
 
         if (TextUtils.isEmpty(emailField)) {

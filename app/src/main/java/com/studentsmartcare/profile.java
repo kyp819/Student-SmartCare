@@ -74,7 +74,7 @@ public class profile extends AppCompatActivity {
         logOutUser = findViewById(R.id.logoutProfile);
         homeButton = findViewById(R.id.homeButtonProfile);
         backPressed = findViewById(R.id.backNow);
-        phoneProfileUser = findViewById(R.id.contactNumber);
+        phoneProfileUser = findViewById(R.id.phoneNumberProfile);
 
     }
 
@@ -88,8 +88,7 @@ public class profile extends AppCompatActivity {
                 if (value != null){
                     fullNameProfileUser.setText(value.getString("fullNameUser"));
                     emailProfileUser.setText(value.getString("emailUser"));
-                   phoneProfileUser.setText(value.getString("phoneNumber"));
-
+                    phoneProfileUser.setText(value.getString("phoneNumber"));
 
                 }
             }
