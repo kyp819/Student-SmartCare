@@ -1,5 +1,7 @@
 package CarCardView;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 
@@ -13,17 +15,21 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.studentsmartcare.BooknowActivity;
 import com.studentsmartcare.R;
 import com.studentsmartcare.profile;
 
@@ -34,6 +40,7 @@ import java.util.Objects;
 public class CarRecyclerActivity extends AppCompatActivity implements carCardInterface{
 private ImageView backButton, profileTapped;
 private SearchView searchBar;
+
     private CarRecyclerViewAdapter carAdapter;
     private RecyclerView carRecyclerViewActivity;
     ArrayList<CarCardModel> carCardModel = new ArrayList<>();
@@ -43,6 +50,7 @@ private SearchView searchBar;
     private FirebaseAuth  fAuth;
     private FirebaseFirestore fbStore;
     private String userID;
+    private FirebaseUser currentUser;
 
 
     @Override
@@ -92,6 +100,8 @@ private SearchView searchBar;
         carRecyclerViewActivity = findViewById(R.id.carRecycleActivityID);
         profileName = findViewById(R.id.helloUser);
 
+
+
     }
 
     private void clickListener() {
@@ -102,7 +112,8 @@ private SearchView searchBar;
     private void firebaseInstances(){
         fAuth = FirebaseAuth.getInstance();
         fbStore = FirebaseFirestore.getInstance();
-        userID = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+        currentUser = fAuth.getCurrentUser();
+
     }
 
     @Override
@@ -110,6 +121,13 @@ private SearchView searchBar;
         popUpMessage();
 
     }
+
+    @Override
+    public void onBookNowClick(int position) {
+        startActivity(new Intent(getApplicationContext(), BooknowActivity.class));
+
+    }
+
     private void popUpMessage() {
         // Inflating the custom pop layout
         Dialog popUp = new Dialog(this);
@@ -132,23 +150,34 @@ private SearchView searchBar;
 
     //Retrieval profile name from firestore
     private void documentSnapshotRetrieve() {
-        dbReference = fbStore.collection("users").document(userID);
-        dbReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        if (currentUser != null) {
+            userID = currentUser.getUid();
+            dbReference = fbStore.collection("users").document(userID);
 
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (value != null) {
-                    String fullName = value.getString("fullNameUser");
-                    profileName.setText("Hello! " + fullName);
-                } else {
-                    profileName.setText("User Name");
+            dbReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    if (error != null) {
+                        Log.e(TAG, "Error fetching document", error);
+                        return;
+                    }
+
+                    if (value != null) {
+                        String fullName = value.getString("fullNameUser");
+                        profileName.setText("Hello! " + fullName);
+                    } else {
+                        profileName.setText("User Name");
+                    }
                 }
+            });
+        } else {
 
-            }
-        });
-
+            Log.e(TAG, "No authenticated user found");
+        }
     }
+
+
     private void searchBarFunction(){
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

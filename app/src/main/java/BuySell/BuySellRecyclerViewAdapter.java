@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -75,6 +76,7 @@ public class BuySellRecyclerViewAdapter extends RecyclerView.Adapter<BuySellRecy
 
         TextView bookNameAdapter, sellerNameAdapter, contactNumAdapter, moreInfo;
         ImageView bookImageAdapter;
+        Button bookNow;
 
 
         public BuySellViewHolder(@NonNull View itemView, buySellRecyclerInterface buySellRecyclerInterface) {
@@ -85,6 +87,8 @@ public class BuySellRecyclerViewAdapter extends RecyclerView.Adapter<BuySellRecy
             contactNumAdapter = itemView.findViewById(R.id.contactNo);
             bookImageAdapter = itemView.findViewById(R.id.imageViewBook);
             moreInfo = itemView.findViewById(R.id.moreInfo);
+
+
 
             moreInfo.setOnClickListener(new View.OnClickListener() {
                 @Override

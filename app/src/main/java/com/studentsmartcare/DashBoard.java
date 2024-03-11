@@ -1,5 +1,8 @@
 package com.studentsmartcare;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -8,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -35,22 +40,23 @@ public class DashBoard extends AppCompatActivity {
     private FirebaseFirestore fbStore;
     private TextView profileName;
 
+    private Button feedbackButton;
+
     private CardView profileTapped;
     private ImageButton logOut;
 
     private String userID;
+    private FirebaseUser currentUser;
 
     private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sessionManager = new SessionManager(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
         sessionManager = new SessionManager(this);
-
-        initializeViews();
         firebaseInstances();
+        initializeViews();
         documentSnapshotRetrieve();
         setClickListener();
 
@@ -67,6 +73,7 @@ public class DashBoard extends AppCompatActivity {
         profileTapped = findViewById(R.id.profileImageView);
         buySellTapped = findViewById(R.id.buySellView);
         busTapped = findViewById(R.id.transitLink);
+        feedbackButton = findViewById(R.id.feedback);
 
 
     }
@@ -78,7 +85,13 @@ public class DashBoard extends AppCompatActivity {
         homeTapped.setOnClickListener(v -> setHomeTapped());
         buySellTapped.setOnClickListener(v -> setBuySellTapped());
         busTapped.setOnClickListener(v -> setTransitTapped());
+        feedbackButton.setOnClickListener(v -> feedbackForm());
 
+
+    }
+
+    private void feedbackForm() {
+        startActivity(new Intent(getApplicationContext(),feedbackForm.class));
 
     }
 
@@ -87,29 +100,44 @@ public class DashBoard extends AppCompatActivity {
     private void firebaseInstances(){
         fAuth = FirebaseAuth.getInstance();
         fbStore = FirebaseFirestore.getInstance();
-        userID = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+        currentUser = fAuth.getCurrentUser();
+
+
     }
 
    // Retrieving name from FirebaseFirestore
 
     private void documentSnapshotRetrieve() {
-        dbReference = fbStore.collection("users").document(userID);
-        dbReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        if (currentUser != null) {
+            userID = currentUser.getUid();
+            dbReference = fbStore.collection("users").document(userID);
 
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (value != null) {
-                    String fullName = value.getString("fullNameUser");
-                    profileName.setText("Hello! " + fullName);
-                } else {
-                    profileName.setText("User Name");
+            dbReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    if (error != null) {
+                        // Handle the error appropriately, such as logging or displaying a message
+                        Log.e(TAG, "Error fetching document", error);
+                        return;
+                    }
+
+                    if (value != null) {
+                        String fullName = value.getString("fullNameUser");
+                        profileName.setText("Hello! " + fullName);
+                    } else {
+                        profileName.setText("User Name");
+                    }
                 }
+            });
+        } else {
 
-            }
-        });
-
+            Log.e(TAG, "No authenticated user found");
+        }
     }
+
+
+
 
 
     //logout user

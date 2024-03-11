@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/feedbackbackgroundui"
+    tools:context=".feedbackForm">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Feedback Form"
+        android:textColor="@color/lightBlue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextView>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="340dp"
+        android:layout_height="500dp"
+        android:background="@drawable/rectanglebackground"
+         android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/fullNameId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="80dp"
+            android:text="Full name"
+            android:textColor="@color/navyBlue"
+
+
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editFullNameId"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/fullNameId"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:hint="Rock Lee"
+            android:background="@drawable/rounded_textview"
+
+
+            />
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editFullNameId"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Comment"
+            android:textColor="@color/navyBlue"
+
+            android:textSize="20sp"
+
+
+            />
+
+        <EditText
+            android:id="@+id/editcomment"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:layout_below="@id/comment"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:hint="..Your comment//"
+            android:gravity="start"
+            android:background="@drawable/rounded_textview"
+
+
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:background="@drawable/feedbackround"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:padding="15dp"
+            android:layout_below="@id/editcomment"
+            android:layout_marginStart="120dp"
+            android:layout_marginTop="20dp"
+
+
+            >
+
+        </Button>
+
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

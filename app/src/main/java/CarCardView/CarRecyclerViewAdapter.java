@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,6 +65,7 @@ public CarRecyclerViewAdapter(CarCardView.carCardInterface carCardInterface, Con
 //holding the views that created from recycler view, similar to oncreate
 
         TextView ownerNameAdapter, carModelAdapter, carNumberAdapter, moreInfo;
+        Button bookNow;
         ImageView carImageAdapter;
 
         public CarViewHolder(@NonNull View itemView, carCardInterface carCardInterface) {
@@ -74,14 +76,30 @@ public CarRecyclerViewAdapter(CarCardView.carCardInterface carCardInterface, Con
             carNumberAdapter = itemView.findViewById(R.id.carModel);
             carImageAdapter = itemView.findViewById(R.id.imageView);
             moreInfo = itemView.findViewById(R.id.moreInfo);
+            bookNow= itemView.findViewById(R.id.bookNowButton);
+
+
+
             moreInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (carCardInterface != null) {
                         carCardInterface.onItemClick(getAdapterPosition());
+
                 }
                 }
             });
+            bookNow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (carCardInterface != null) {
+                        carCardInterface.onBookNowClick(getAdapterPosition());
+
+                    }
+                }
+            });
+
+
         }
     }
 }

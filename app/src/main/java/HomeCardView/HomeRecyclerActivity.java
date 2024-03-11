@@ -1,5 +1,7 @@
 package HomeCardView;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -12,12 +14,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -39,6 +43,7 @@ public class HomeRecyclerActivity extends AppCompatActivity implements homeCardI
     private TextView profileName;
     private FirebaseAuth fAuth;
     private FirebaseFirestore fbStore;
+    private FirebaseUser currentUser;
     private String userID;
 
 
@@ -102,7 +107,7 @@ private void initializationViews(){
     private void firebaseInstances(){
         fAuth = FirebaseAuth.getInstance();
         fbStore = FirebaseFirestore.getInstance();
-        userID = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+        currentUser = fAuth.getCurrentUser();
     }
 
     @Override
@@ -133,23 +138,34 @@ private void initializationViews(){
 
     //Retrieval profile name from firestore
     private void documentSnapshotRetrieve() {
-        dbReference = fbStore.collection("users").document(userID);
-        dbReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        if (currentUser != null) {
+            userID = currentUser.getUid();
+            dbReference = fbStore.collection("users").document(userID);
 
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (value != null) {
-                    String fullName = value.getString("fullNameUser");
-                    profileName.setText("Hello! " + fullName);
-                } else {
-                    profileName.setText("User Name");
+            dbReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    if (error != null) {
+                        Log.e(TAG, "Error fetching document", error);
+                        return;
+                    }
+
+                    if (value != null) {
+                        String fullName = value.getString("fullNameUser");
+                        profileName.setText("Hello! " + fullName);
+                    } else {
+                        profileName.setText("User Name");
+                    }
                 }
+            });
+        } else {
 
-            }
-        });
-
+            Log.e(TAG, "No authenticated user found");
+        }
     }
+
+
 
     //Search functionality
     private void searchBarFunction() {

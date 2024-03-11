@@ -35,6 +35,7 @@
     <ImageView
         android:id="@+id/imageProfile"
         android:layout_width="131dp"
+        android:background="@drawable/feedbackround"
         android:layout_height="121dp"
         app:srcCompat="@drawable/ic_launcher_foreground"
         />

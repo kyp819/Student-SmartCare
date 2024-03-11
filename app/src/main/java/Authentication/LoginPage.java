@@ -75,15 +75,15 @@ public class LoginPage extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
 
         fbStore = FirebaseFirestore.getInstance();
+        passwordVisibility();
+        googleSignIn();
+        setClickListener();
 
-
-        //checking if the user logged in or not.
+//        checking if the user logged in or not.
         if (fAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
         }
-passwordVisibility();
-            googleSignIn();
-            setClickListener();
+
 
     }
 
@@ -118,20 +118,23 @@ private void setClickListener(){
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK);
-                        Intent data = result.getData();
-                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-                        try {
-                            task.getResult(ApiException.class);
-                            finish();
-                            Intent intent = new Intent(LoginPage.this, DashBoard.class);
-                            startActivity(intent);
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
 
-                        } catch (ApiException e) {
-                            Toast.makeText(LoginPage.this, ("Something went wrong"), Toast.LENGTH_SHORT).show();
-                       }
+                            try {
+                                task.getResult(ApiException.class);
+                                finish();
+                                Intent intent = new Intent(LoginPage.this, DashBoard.class);
+                                startActivity(intent);
+
+                                
+                            } catch (ApiException e) {
+                                Toast.makeText(LoginPage.this, ("Something went wrong"), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
                     }
                 });
 

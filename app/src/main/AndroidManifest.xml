@@ -14,8 +14,14 @@
         android:theme="@style/Theme.StudentSmartCare"
         tools:targetApi="31">
         <activity
+            android:name=".BooknowActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feedbackForm"
+            android:exported="false" />
+        <activity
             android:name=".splashscreen"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,9 +51,7 @@
             android:exported="false" /> <!-- Launcher Activity -->
         <activity
             android:name="Authentication.LoginPage"
-            android:exported="true">
-
-        </activity> <!-- Other Activities -->
+            android:exported="true" /> <!-- Other Activities -->
         <activity
             android:name=".DashBoard"
             android:exported="true" />
