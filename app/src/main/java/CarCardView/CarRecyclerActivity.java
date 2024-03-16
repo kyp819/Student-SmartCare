@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,6 +31,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
 import com.studentsmartcare.BooknowActivity;
 import com.studentsmartcare.R;
 import com.studentsmartcare.profile;
@@ -38,7 +44,8 @@ import java.util.Objects;
 
 
 public class CarRecyclerActivity extends AppCompatActivity implements carCardInterface{
-private ImageView backButton, profileTapped;
+private ImageView backButton;
+        private RoundedImageView profileTapped;
 private SearchView searchBar;
 
     private CarRecyclerViewAdapter carAdapter;
@@ -51,6 +58,7 @@ private SearchView searchBar;
     private FirebaseFirestore fbStore;
     private String userID;
     private FirebaseUser currentUser;
+    private StorageReference storageReference;
 
 
     @Override
@@ -61,6 +69,8 @@ private SearchView searchBar;
         initializationViews();
          firebaseInstances();
          documentSnapshotRetrieve();
+         storageReference = FirebaseStorage.getInstance().getReference();
+         retrieveProfileImage();
         setUpCarModel();
         carRecyclerViewActivity.setAdapter(carAdapter);
         carRecyclerViewActivity.setLayoutManager(new LinearLayoutManager(this));
@@ -210,6 +220,19 @@ private SearchView searchBar;
 
 
         });
+    }
+
+    private  void retrieveProfileImage(){
+        StorageReference pFileReference = storageReference.child("usersImage/" +fAuth.getCurrentUser().getUid()+"/profileImage");
+
+        pFileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).fit().centerCrop().into(profileTapped);
+
+            }
+        });
+
     }
     private void profileUser() {
         startActivity(new Intent(getApplicationContext(), profile.class));

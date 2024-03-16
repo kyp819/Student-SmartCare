@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.DisplayMetrics;
@@ -29,6 +30,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -36,6 +38,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
+import com.studentsmartcare.DashBoard;
 import com.studentsmartcare.R;
 import com.studentsmartcare.profile;
 
@@ -43,11 +50,13 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class BuysellRecyclerActivity extends AppCompatActivity implements buySellRecyclerInterface {
-    private ImageView backButton, profileTapped;
+    private ImageView backButton;
     ArrayList<BuySellModel> buySellCardModel = new ArrayList<>();
     private SearchView searchBar;
-    private RecyclerView buySellRecyclerView;
+    private RoundedImageView profileTapped;
 
+    private RecyclerView buySellRecyclerView;
+private StorageReference storageReference;
     private TextView profileName;
 
     private BuySellRecyclerViewAdapter buySellAdapter;
@@ -67,12 +76,14 @@ public class BuysellRecyclerActivity extends AppCompatActivity implements buySel
         initializationViews();
         firebaseInstances();
         documentSnapshotRetrieve();
-
+        storageReference = FirebaseStorage.getInstance().getReference();
+        retrieveProfileImage();
         setUpBuySellModel();
         buySellRecyclerView.setAdapter(buySellAdapter);
         buySellRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         clickListener();
         searchBarFunction();
+
 
     }
 
@@ -212,6 +223,19 @@ public class BuysellRecyclerActivity extends AppCompatActivity implements buySel
                 } else {
                     buySellAdapter.setFiltered(filteredList);
                 }
+            }
+        });
+
+    }
+
+    private  void retrieveProfileImage(){
+        StorageReference pFileReference = storageReference.child("usersImage/" +fAuth.getCurrentUser().getUid()+"/profileImage");
+
+        pFileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).fit().centerCrop().into(profileTapped);
+
             }
         });
 

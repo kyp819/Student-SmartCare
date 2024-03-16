@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".editProfile"
+    android:background="@drawable/feedbackbackgroundui"
+
+    >
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_margin="30dp"
+        android:background="@drawable/rectanglebackground"
+        android:elevation="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@android:color/transparent"
+                android:text="Full Name"
+                android:textSize="20sp"
+                android:textColor="@color/navyBlue"
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/userNameText"
+                android:layout_width="220dp"
+                android:layout_height="50dp"
+                android:textSize="20sp"
+                android:hint="@string/full_name"
+                android:background="@drawable/rounded_textview"
+                app:layout_constraintBottom_toBottomOf="@id/userName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.70"
+                app:layout_constraintStart_toEndOf="@id/userName"
+                app:layout_constraintTop_toTopOf="@id/userName"
+                >
+
+
+            </EditText>
+
+            <TextView
+                android:id="@+id/emailId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:background="@android:color/transparent"
+                android:text="Email"
+                android:layout_marginTop="50dp"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/navyBlue"
+                app:layout_constraintTop_toBottomOf="@id/userName">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/emailText"
+                android:layout_width="220dp"
+                android:layout_height="50dp"
+                android:hint="studentSmartcare@gmail.com"
+                android:background="@drawable/rounded_textview"
+                android:textColor="@color/navyBlue"
+                android:textSize="20sp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintBottom_toBottomOf="@id/emailId"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.42"
+                app:layout_constraintStart_toEndOf="@id/emailId"
+                app:layout_constraintTop_toBottomOf="@id/userName"
+                >
+
+            </EditText>
+
+            <TextView
+                android:id="@+id/phoneNumber"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:background="@android:color/transparent"
+                android:text="Phone Number"
+                android:textSize="20sp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/navyBlue"
+
+                app:layout_constraintTop_toBottomOf="@id/emailId">
+
+            </TextView>
+
+
+            <EditText
+                android:id="@+id/phoneText"
+                android:layout_width="220dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/rounded_textview"
+                android:hint="+1-123-456-789"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/phoneNumber"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.428"
+                app:layout_constraintStart_toEndOf="@id/phoneNumber"
+                app:layout_constraintTop_toBottomOf="@id/emailId"
+                app:layout_constraintVertical_bias="0.925">
+
+            </EditText>
+
+            <Button
+                android:id="@+id/updateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+
+                android:background="@color/navyBlue"
+                android:padding="5dp"
+                android:text="Update"
+
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/phoneNumber">
+
+
+            </Button>
+
+            <Button
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:background="@color/navyBlue"
+                android:padding="5dp"
+                android:text="Cancel"
+                android:textColor="@color/white"
+
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phoneText" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

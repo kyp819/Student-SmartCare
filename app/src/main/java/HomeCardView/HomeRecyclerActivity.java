@@ -13,6 +13,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,6 +29,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
 import com.studentsmartcare.R;
 import com.studentsmartcare.profile;
 
@@ -35,7 +41,9 @@ import java.util.Objects;
 
 
 public class HomeRecyclerActivity extends AppCompatActivity implements homeCardInterface {
-    private ImageView backButton,profileImage;
+    private ImageView backButton;
+    private RoundedImageView profileTapped;
+
     private RecyclerView homeRecyclerViewActivity;
     private HomeRecyclerAdapter homeAdapter;
     private SearchView searchBar;
@@ -45,6 +53,7 @@ public class HomeRecyclerActivity extends AppCompatActivity implements homeCardI
     private FirebaseFirestore fbStore;
     private FirebaseUser currentUser;
     private String userID;
+    private  StorageReference storageReference;
 
 
     ArrayList<HomeCardModel> homeCardModel = new ArrayList<>();
@@ -58,6 +67,8 @@ public class HomeRecyclerActivity extends AppCompatActivity implements homeCardI
         initializationViews();
         firebaseInstances();
         documentSnapshotRetrieve();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        retrieveProfileImage();
         setUpHomeModel();
         homeRecyclerViewActivity.setAdapter(homeAdapter);
         homeRecyclerViewActivity.setLayoutManager(new LinearLayoutManager(this));
@@ -87,7 +98,7 @@ public class HomeRecyclerActivity extends AppCompatActivity implements homeCardI
 
 private void initializationViews(){
         backButton = findViewById(R.id.backNow);
-        profileImage = findViewById(R.id.profileView);
+        profileTapped = findViewById(R.id.profileView);
         searchBar = findViewById(R.id.searchBar);
         homeRecyclerViewActivity  = findViewById(R.id.homeRecyclerActivityID);
         homeAdapter = new HomeRecyclerAdapter(this, this, homeCardModel);
@@ -99,7 +110,7 @@ private void initializationViews(){
 
     private void clickListener() {
         backButton.setOnClickListener(v -> backButtonPressed());
-        profileImage.setOnClickListener(v -> profileUser());
+        profileTapped.setOnClickListener(v -> profileUser());
     }
 
 
@@ -195,6 +206,20 @@ private void initializationViews(){
                 }
             }
         });
+    }
+
+
+    private  void retrieveProfileImage(){
+        StorageReference pFileReference = storageReference.child("usersImage/" +fAuth.getCurrentUser().getUid()+"/profileImage");
+
+        pFileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).fit().centerCrop().into(profileTapped);
+
+            }
+        });
+
     }
     private void backButtonPressed(){
         finish();

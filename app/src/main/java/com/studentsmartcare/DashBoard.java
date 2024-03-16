@@ -2,13 +2,13 @@ package com.studentsmartcare;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -25,13 +26,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import java.util.Objects;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import BuySell.BuysellRecyclerActivity;
 import CarCardView.CarRecyclerActivity;
 import Authentication.LoginPage;
 import HomeCardView.HomeRecyclerActivity;
+import feedback.feedbackForm;
+import feedback.feedbackRecyclerActivity;
 
 public class DashBoard extends AppCompatActivity {
     private ImageView carTapped, homeTapped, buySellTapped, busTapped;
@@ -40,9 +46,11 @@ public class DashBoard extends AppCompatActivity {
     private FirebaseFirestore fbStore;
     private TextView profileName;
 
+    StorageReference storageReference;
+
     private Button feedbackButton;
 
-    private CardView profileTapped;
+    private RoundedImageView profileTapped;
     private ImageButton logOut;
 
     private String userID;
@@ -56,9 +64,12 @@ public class DashBoard extends AppCompatActivity {
         setContentView(R.layout.dashboard);
         sessionManager = new SessionManager(this);
         firebaseInstances();
+        storageReference = FirebaseStorage.getInstance().getReference();
+
         initializeViews();
         documentSnapshotRetrieve();
         setClickListener();
+        retrieveProfileImage();
 
 
     }
@@ -91,13 +102,13 @@ public class DashBoard extends AppCompatActivity {
     }
 
     private void feedbackForm() {
-        startActivity(new Intent(getApplicationContext(),feedbackForm.class));
+        startActivity(new Intent(getApplicationContext(), feedbackRecyclerActivity.class));
 
     }
 
 
     //Firebase Instance
-    private void firebaseInstances(){
+    private void firebaseInstances() {
         fAuth = FirebaseAuth.getInstance();
         fbStore = FirebaseFirestore.getInstance();
         currentUser = fAuth.getCurrentUser();
@@ -105,7 +116,7 @@ public class DashBoard extends AppCompatActivity {
 
     }
 
-   // Retrieving name from FirebaseFirestore
+    // Retrieving name from FirebaseFirestore
 
     private void documentSnapshotRetrieve() {
         if (currentUser != null) {
@@ -134,53 +145,67 @@ public class DashBoard extends AppCompatActivity {
 
             Log.e(TAG, "No authenticated user found");
         }
-    }
-
-
-
-
-
-    //logout user
-    private void logOutUser() {
-        fAuth.signOut();
-        Toast.makeText(DashBoard.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-        // Clear session and redirect to loginPage
-        sessionManager.logout();
-        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finishAffinity();
 
     }
 
-    private void setCarTapped() {
-        startActivity(new Intent(getApplicationContext(), CarRecyclerActivity.class));
+
+
+    //
+
+    private  void retrieveProfileImage(){
+        StorageReference pFileReference = storageReference.child("usersImage/" +fAuth.getCurrentUser().getUid()+"/profileImage");
+
+        pFileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).fit().centerCrop().into(profileTapped);
+
+            }
+        });
 
     }
-
-    private void setBuySellTapped() {
-        startActivity(new Intent(getApplicationContext(), BuysellRecyclerActivity.class));
-    }
-
-    private void setHomeTapped() {
-        startActivity(new Intent(getApplicationContext(), HomeRecyclerActivity.class));
-    }
-
-    //redirected ton profile
-    private void profileUser() {
-        startActivity(new Intent(getApplicationContext(), profile.class));
-
-    }
-
-    private void setTransitTapped() {
-        Uri uri = Uri.parse("https://www.myridebarrie.ca/");
-        if (uri != null) {
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        //logout user
+        private void logOutUser () {
+            fAuth.signOut();
+            Toast.makeText(DashBoard.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+            // Clear session and redirect to loginPage
+            sessionManager.logout();
+            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else{
-            Toast.makeText(DashBoard.this, "Error. Invalid website", Toast.LENGTH_SHORT).show();
+            finishAffinity();
+
         }
 
+        private void setCarTapped () {
+            startActivity(new Intent(getApplicationContext(), CarRecyclerActivity.class));
 
+        }
+
+        private void setBuySellTapped () {
+            startActivity(new Intent(getApplicationContext(), BuysellRecyclerActivity.class));
+        }
+
+        private void setHomeTapped () {
+            startActivity(new Intent(getApplicationContext(), HomeRecyclerActivity.class));
+        }
+
+        //redirected ton profile
+        private void profileUser () {
+            startActivity(new Intent(getApplicationContext(), profile.class));
+
+        }
+
+        private void setTransitTapped () {
+            Uri uri = Uri.parse("https://www.myridebarrie.ca/");
+            if (uri != null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            } else {
+                Toast.makeText(DashBoard.this, "Error. Invalid website", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
     }
-}
+

@@ -4,8 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/feedbackFormID"
     android:background="@drawable/feedbackbackgroundui"
-    tools:context=".feedbackForm">
+    tools:context="feedback.feedbackForm">
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_arrow_back_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="10dp"
+        >
+
+    </ImageView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -88,6 +101,7 @@
             />
 
         <Button
+            android:id="@+id/submitClicked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"

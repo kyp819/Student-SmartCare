@@ -2,6 +2,7 @@ package com.studentsmartcare;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,13 +13,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Button;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -26,8 +29,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import java.util.Objects;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
 import Authentication.LoginPage;
 
@@ -39,8 +45,10 @@ public class profile extends AppCompatActivity {
 
     private FirebaseAuth fAuth;
     private ImageButton homeButton, logOutUser;
-    private ImageView backPressed, imageProfile, editImage;
+    private RoundedImageView  imageProfile;
+    private ImageView backPressed, editImage, editProfileIcon;
     private FirebaseFirestore fbStore;
+    private StorageReference storageReference;
 
     private Uri imageUri;
 
@@ -67,6 +75,7 @@ public class profile extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fbStore = FirebaseFirestore.getInstance();
         currentUser = fAuth.getCurrentUser();
+        storageReference = FirebaseStorage.getInstance().getReference();
 
 
         //method
@@ -77,11 +86,25 @@ public class profile extends AppCompatActivity {
         homeButton.setOnClickListener(v -> homeDashboard());
         backPressed.setOnClickListener(v -> backSession());
        editImage.setOnClickListener(v -> profileImageUpload());
+        retrieveProfileImage();
+        editProfileIcon.setOnClickListener(v -> popUptoEditprofile(v));
+
 
         }
 
+    private void popUptoEditprofile(View v) {
+        Intent intent = new Intent(v.getContext(), editProfile.class);
+        intent.putExtra("fullName", fullNameProfileUser.getText().toString());
+        intent.putExtra("email", emailProfileUser.getText().toString());
+        intent.putExtra("phoneNumber", phoneProfileUser.getText().toString());
+        startActivity(intent);
+
+
+    }
+
+    //Image upload in profile
     private void profileImageUpload() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
@@ -98,8 +121,52 @@ public class profile extends AppCompatActivity {
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .error(R.drawable.ic_launcher_background)
                     .into(imageProfile);
+            Uri uriImage = data.getData();
+
+            uploadImageFirebase(uriImage);
         }
     }
+
+    //upload image to firebase
+    private void uploadImageFirebase(Uri uriImage) {
+        final StorageReference upFileReference = storageReference.child("usersImage/" +fAuth.getCurrentUser().getUid()+"/profileImage");
+     upFileReference.putFile(uriImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+    @Override
+    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        Toast.makeText(profile.this,"Image Uploaded", Toast.LENGTH_SHORT).show();
+
+    }
+}).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(profile.this,"Failed to Upload", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
+
+    }
+
+
+    //retrieving image from firestore
+    private  void retrieveProfileImage(){
+        StorageReference pFileReference = storageReference.child("usersImage/" +fAuth.getCurrentUser().getUid()+"/profileImage");
+
+        pFileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri)
+                                .fit()
+                                .centerCrop()
+                                .into(imageProfile);
+
+                    }
+                });
+
+    }
+
     private void backSession() {
         finish();
     }
@@ -115,6 +182,7 @@ public class profile extends AppCompatActivity {
         phoneProfileUser = findViewById(R.id.phoneNumberProfile);
         editImage = findViewById(R.id.editIcon);
         imageProfile = findViewById(R.id.imageProfile);
+        editProfileIcon = findViewById(R.id.editProfileIcon);
 
 
     }
@@ -154,6 +222,8 @@ public class profile extends AppCompatActivity {
             Log.e(TAG, "No authenticated user found");
         }
     }
+
+
 
     private void logOutUserProfile() {
         fAuth.signOut();
