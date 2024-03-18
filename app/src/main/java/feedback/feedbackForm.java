@@ -64,9 +64,10 @@ public class feedbackForm extends AppCompatActivity {
     private void submitFeedback() {
         String userName = fullName.getText().toString();
         String comments = comment.getText().toString();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
-        feedBack = new feedBack(0, userName, comments);
+        feedBack = new feedBack(0, userName, comments, userId);
 
         feedBackDao.addFeedback(feedBack);
 

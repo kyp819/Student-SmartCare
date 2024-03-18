@@ -1,0 +1,52 @@
+<!-- dialog_update_feedback.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:src="@drawable/rectanglebackground"
+    android:layout_marginTop="240dp"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/editTextFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_textview"
+        android:layout_marginBottom="10dp"
+        android:hint="Full Name" />
+
+    <EditText
+        android:id="@+id/editTextComment"
+        android:layout_width="match_parent"
+        android:background="@drawable/rounded_textview"
+
+        android:layout_height="wrap_content"
+        android:hint="Comment" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/buttonUpdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/navyBlue"
+            android:textColor="@color/white"
+            android:layout_marginEnd="10dp"
+            android:text="Update" />
+
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/navyBlue"
+            android:textColor="@color/white"
+            android:text="Cancel" />
+    </LinearLayout>
+</LinearLayout>

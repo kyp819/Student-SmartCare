@@ -8,7 +8,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 
-@Database(entities = {feedBack.class}, version = 1)
+@Database(entities = {feedBack.class}, version = 2)
 public abstract class feedbackDBHelper extends RoomDatabase{
     public abstract feedBackDao getDao();
     public static feedbackDBHelper INSTANCE;

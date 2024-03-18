@@ -146,8 +146,8 @@ private SearchView searchBar;
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(popUp.getWindow().getAttributes());
 
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT; // Example: Match parent width
-        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT; // Example: Wrap content height
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         popUp.getWindow().setAttributes(layoutParams);
 

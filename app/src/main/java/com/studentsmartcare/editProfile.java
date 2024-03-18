@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import Authentication.LoginPage;
+
 public class editProfile extends AppCompatActivity {
 
     private EditText fullNameEdit, emailEdit, phoneEdit;
@@ -28,7 +30,7 @@ public class editProfile extends AppCompatActivity {
     private FirebaseFirestore fbStore;
    FirebaseUser fbUser;
 
-    private Button updateButton;
+    private Button updateButton, cancelButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +40,12 @@ public class editProfile extends AppCompatActivity {
         fbStore = FirebaseFirestore.getInstance();
         fbUser = fAuth.getCurrentUser();
 
+
         fullNameEdit = findViewById(R.id.userNameText);
         emailEdit = findViewById(R.id.emailText);
         phoneEdit = findViewById(R.id.phoneText);
         updateButton = findViewById(R.id.updateButton);
+        cancelButton = findViewById(R.id.cancelButton);
 
         Intent data = getIntent();
         String fullName = data.getStringExtra("fullName");
@@ -103,6 +107,16 @@ Toast.makeText(editProfile.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
 
 
+});
+
+
+cancelButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(getApplicationContext(), profile.class));
+        finish();
+
+    }
 });
 
 

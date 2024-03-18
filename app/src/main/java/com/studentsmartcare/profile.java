@@ -98,6 +98,8 @@ public class profile extends AppCompatActivity {
         intent.putExtra("email", emailProfileUser.getText().toString());
         intent.putExtra("phoneNumber", phoneProfileUser.getText().toString());
         startActivity(intent);
+        finish();
+
 
 
     }

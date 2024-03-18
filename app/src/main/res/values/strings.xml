@@ -122,5 +122,6 @@
         <item>+1389-467-29647</item>
         <item>+1234-678-4539</item>
     </string-array>
+    <string name="default_web_client_id" translatable="false">YOUR_WEB_CLIENT_ID</string>
 
 </resources>
