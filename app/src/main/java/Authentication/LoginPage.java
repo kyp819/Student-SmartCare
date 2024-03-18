@@ -4,6 +4,8 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -26,22 +28,32 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.studentsmartcare.R;
 import com.studentsmartcare.DashBoard;
 import com.studentsmartcare.SessionManager;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
 public class LoginPage extends AppCompatActivity {
 
+    private static final int GOOGLE_SIGN_IN = 1;
     //creating variables
     private EditText emailId;
     private EditText password;
@@ -56,6 +68,7 @@ public class LoginPage extends AppCompatActivity {
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     private SessionManager sessionManager;
+    private FirebaseUser fbUser;
 
 
     @Override
@@ -69,16 +82,15 @@ public class LoginPage extends AppCompatActivity {
             finish(); // Optionally finish the login activity
         }
         setContentView(R.layout.activity_login_page);
-
         initializeViews();
 
         fAuth = FirebaseAuth.getInstance();
 
         fbStore = FirebaseFirestore.getInstance();
-        passwordVisibility();
         googleSignIn();
-        setClickListener();
 
+        passwordVisibility();
+        setClickListener();
 //        checking if the user logged in or not.
         if (fAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), DashBoard.class));
@@ -97,7 +109,8 @@ public class LoginPage extends AppCompatActivity {
         forgetPassword = findViewById(R.id.forgetpassword);
         registeredAccount = findViewById(R.id.registerAccount);
         googleButton =  findViewById(R.id.googleButton);
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("910743096537-ivh6ur6d945fnej0a8esf9v1nh8csb8e.apps.googleusercontent.com").requestEmail().build();
         gsc = GoogleSignIn.getClient(this,gso);
 
     }
@@ -113,40 +126,63 @@ private void setClickListener(){
 
 
 //SignIn using google
-    private void googleSignIn() {
-    activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            Intent data = result.getData();
-                            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
+private void googleSignIn(){
+    gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build();
+    gsc = GoogleSignIn.getClient(this, gso);
 
-                            try {
-                                task.getResult(ApiException.class);
-                                finish();
-                                Intent intent = new Intent(LoginPage.this, DashBoard.class);
-                                startActivity(intent);
+}
 
-                                
-                            } catch (ApiException e) {
-                                Toast.makeText(LoginPage.this, ("Something went wrong"), Toast.LENGTH_SHORT).show();
-                            }
-                        }
+    private void googleClicked() {
+        Intent signInIntent = gsc.getSignInIntent();
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GOOGLE_SIGN_IN) {
+            Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount signInAccount = signInAccountTask.getResult(ApiException.class);
+                AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
+                fAuth.signInWithCredential(authCredential).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser fbUser = fAuth.getCurrentUser();
+                        // Retrieve user information from GoogleSignInAccount
+                        String userId = fbUser.getUid();
+                        String displayName = signInAccount.getDisplayName();
+                        String email = signInAccount.getEmail();
+
+                        // Create a user object with the retrieved data
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("fullNameUser", displayName);
+                        user.put("emailUser", email);
+                        user.put("passwordUser", "");
+                        user.put("spinnerSelected", "");
+                        // Add the user object to Firestore
+                        fbStore.collection("users").document(userId)
+                                .set(user)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(getApplicationContext(), "Logged In.", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(), DashBoard.class));
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(getApplicationContext(), "Failed to add user data to Firestore.", Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
+            } catch (ApiException e) {
+                Toast.makeText(getApplicationContext(), "Google sign in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
-    private void googleClicked (){
-        Intent signInIntent = gsc.getSignInIntent();
-        activityResultLauncher.launch(signInIntent);
-
-    }
 
     //Login Password visibility
 private void passwordVisibility() {

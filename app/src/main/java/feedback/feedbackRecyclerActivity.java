@@ -8,16 +8,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
 import com.studentsmartcare.DashBoard;
 import com.studentsmartcare.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class feedbackRecyclerActivity extends AppCompatActivity implements listenerInterface {
@@ -35,6 +37,10 @@ public class feedbackRecyclerActivity extends AppCompatActivity implements liste
 
     feedbackAdapter feedbackAdapter;
 
+    FirebaseUser currentUser;
+    FirebaseAuth firebaseAuth;
+    String currentUserId;
+
 
     feedBackDao feedBackDao;
     feedBackModel feedBackModel;
@@ -45,10 +51,14 @@ public class feedbackRecyclerActivity extends AppCompatActivity implements liste
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_recycler);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        // Get the current user
+        currentUser = firebaseAuth.getCurrentUser();
+        // Get the user ID
         feedbackDBHelper = feedbackDBHelper.getInstance(this);
         feedBackDao = feedbackDBHelper.getDao();
         recyclerView = findViewById(R.id.recyclerViewFeed);
-        feedbackAdapter = new feedbackAdapter(this, models,this);
+        feedbackAdapter = new feedbackAdapter(this, models, this, currentUserId);
         recyclerView.setAdapter(feedbackAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -70,16 +80,16 @@ public class feedbackRecyclerActivity extends AppCompatActivity implements liste
 
 
     private void fetchData() {
-            feedbackAdapter.clearData();
+        feedbackAdapter.clearData();
 
-            List<feedBack> feedBackList = feedBackDao.getAllFeedback();
-            for(int i = 0; i < feedBackList.size(); i++){
-                feedBack feedBack= feedBackList.get(i);
-                feedbackAdapter.addData(feedBack);
+        List<feedBack> feedBackList = feedBackDao.getAllFeedback();
 
-                recyclerView.scrollToPosition(feedbackAdapter.getItemCount()-1);
-            }
+        for (feedBack feedback : feedBackList) {
+            feedbackAdapter.addData(feedback);
+        }
+        recyclerView.scrollToPosition(feedbackAdapter.getItemCount() - 1);
     }
+
 
     @Override
     protected void onResume() {
@@ -89,16 +99,27 @@ public class feedbackRecyclerActivity extends AppCompatActivity implements liste
     }
 
 
-
     @Override
     public void onDelete(int id, int pos) {
-        feedBackDao.deleteFeedback(id);
-        models.remove(pos);
-        feedbackAdapter.notifyItemRemoved(pos);
-        feedbackAdapter.notifyItemRangeChanged(pos, models.size());
+        feedBack feedback = models.get(pos);
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        if (feedback.getUserId().equals(currentUserId)) {
+            // Delete the comment if it belongs to the current user
+            feedBackDao.deleteFeedback(id);
+            models.remove(pos);
+            feedbackAdapter.notifyItemRemoved(pos);
+            feedbackAdapter.notifyItemRangeChanged(pos, models.size());
+        } else {
+
+
+
+            // Display a message indicating that the user is not allowed to delete this comment
+            Toast.makeText(this, "You can only delete your own comments", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
-
 
     //backButton
     private void setBackButton (){
@@ -114,6 +135,8 @@ public class feedbackRecyclerActivity extends AppCompatActivity implements liste
 
     @Override
     public void onUpdate(feedBack feedBack) {
-
+        Intent intent = new Intent(this, updateFeedback.class);
+        intent.putExtra("model", feedBack);
+        startActivity(intent);
     }
 }

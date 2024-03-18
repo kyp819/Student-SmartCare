@@ -5,25 +5,7 @@
     "storage_bucket": "studentsmartcare-10648.appspot.com"
   },
   "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:910743096537:android:107e2b868ff052bbc282c8",
-        "android_client_info": {
-          "package_name": "com.example.studentsmartcare"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC2rQILEAxp4etv7i2kzFssVLexnqNe7DE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
+
     {
       "client_info": {
         "mobilesdk_app_id": "1:910743096537:android:3682d3b8d2b0061ac282c8",
