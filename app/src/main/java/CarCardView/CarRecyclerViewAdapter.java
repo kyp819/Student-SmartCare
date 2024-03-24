@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.studentsmartcare.R;
 
 import java.util.ArrayList;
@@ -46,12 +47,17 @@ public CarRecyclerViewAdapter(CarCardView.carCardInterface carCardInterface, Con
     public void onBindViewHolder(@NonNull CarRecyclerViewAdapter.CarViewHolder holder, int position) {
     //assigning value from CarViewHolder to variable holder
         holder.ownerNameAdapter.setText(carCardModelAdapter.get(position).getOwnerName());
+        holder.carRoute.setText(carCardModelAdapter.get(position).getRoute());
         holder.carModelAdapter.setText(carCardModelAdapter.get(position).getCarModel());
-        holder.carNumberAdapter.setText(carCardModelAdapter.get(position).getCarNumber());
-        holder.carImageAdapter.setImageResource(carCardModelAdapter.get(position).getCarImage());
-
-
+        String carImageUrl = carCardModelAdapter.get(position).getCarImage();
+        if (carImageUrl != null && !carImageUrl.isEmpty()) {
+            Picasso.get().load(carImageUrl).into(holder.carImageAdapter);
+        } else {
+            holder.carImageAdapter.setImageResource(R.drawable.car);
+        }
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -64,7 +70,7 @@ public CarRecyclerViewAdapter(CarCardView.carCardInterface carCardInterface, Con
     public  static class CarViewHolder extends RecyclerView.ViewHolder{
 //holding the views that created from recycler view, similar to oncreate
 
-        TextView ownerNameAdapter, carModelAdapter, carNumberAdapter, moreInfo;
+        TextView ownerNameAdapter, carModelAdapter, carRoute, moreInfo;
         Button bookNow;
         ImageView carImageAdapter;
 
@@ -73,7 +79,7 @@ public CarRecyclerViewAdapter(CarCardView.carCardInterface carCardInterface, Con
 
             ownerNameAdapter = itemView.findViewById(R.id.ownerName);
             carModelAdapter = itemView.findViewById(R.id.route);
-            carNumberAdapter = itemView.findViewById(R.id.carModel);
+            carRoute = itemView.findViewById(R.id.carModel);
             carImageAdapter = itemView.findViewById(R.id.imageView);
             moreInfo = itemView.findViewById(R.id.moreInfo);
             bookNow= itemView.findViewById(R.id.bookNowButton);

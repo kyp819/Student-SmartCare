@@ -3,6 +3,7 @@ package BuySell;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -33,6 +34,10 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -48,6 +53,8 @@ import com.studentsmartcare.profile;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import CarCardView.CarCardModel;
 
 public class BuysellRecyclerActivity extends AppCompatActivity implements buySellRecyclerInterface {
     private ImageView backButton;
@@ -239,6 +246,28 @@ private StorageReference storageReference;
             }
         });
 
+    }
+
+    private void fetchData() {
+        FirebaseDatabase.getInstance().getReference("BuySell")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        buySellCardModel.clear();
+                        for (DataSnapshot dbSnapshot: snapshot.getChildren()){
+                            BuySellModel buySellModel = dbSnapshot.getValue(BuySellModel.class);
+                            buySellCardModel.add(buySellModel);
+
+                        }
+                        // Notify adapter after adding data
+                        buySellAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Database error: " + error.getMessage());
+                    }
+                });
     }
 
     //Retrieval of user Profile name using UserProfileModel

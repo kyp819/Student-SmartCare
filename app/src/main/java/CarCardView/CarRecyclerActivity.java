@@ -2,6 +2,7 @@ package CarCardView;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 
@@ -23,14 +24,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -42,16 +49,17 @@ import com.studentsmartcare.profile;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import feedback.feedBackModel;
+
 
 public class CarRecyclerActivity extends AppCompatActivity implements carCardInterface{
 private ImageView backButton;
-        private RoundedImageView profileTapped;
+private RoundedImageView profileTapped;
 private SearchView searchBar;
 
     private CarRecyclerViewAdapter carAdapter;
     private RecyclerView carRecyclerViewActivity;
     ArrayList<CarCardModel> carCardModel = new ArrayList<>();
-    int[] carImages = {R.drawable.car,R.drawable.car,R.drawable.car,R.drawable.car,R.drawable.car};
     private DocumentReference dbReference;
     private TextView profileName;
     private FirebaseAuth  fAuth;
@@ -59,6 +67,8 @@ private SearchView searchBar;
     private String userID;
     private FirebaseUser currentUser;
     private StorageReference storageReference;
+
+    private FirebaseDatabase database;
 
 
     @Override
@@ -71,10 +81,10 @@ private SearchView searchBar;
          documentSnapshotRetrieve();
          storageReference = FirebaseStorage.getInstance().getReference();
          retrieveProfileImage();
-        setUpCarModel();
+
         carRecyclerViewActivity.setAdapter(carAdapter);
         carRecyclerViewActivity.setLayoutManager(new LinearLayoutManager(this));
-
+        fetchData();
         clickListener();
 
         searchBarFunction();
@@ -84,23 +94,7 @@ private SearchView searchBar;
 
 
 
-    private void setUpCarModel(){
-        String[] ownerName = getResources().getStringArray(R.array.ownerNames);
-        String[] carModel = getResources().getStringArray(R.array.route);
-        String[] carNumbers = getResources().getStringArray(R.array.carModels);
 
-
-
-        for(int i = 0; i< ownerName.length; i++){
-            carCardModel.add(new CarCardModel(
-                    ownerName[i],
-                    carModel[i],
-                    carNumbers[i],
-                    carImages[i]
-            ));
-        }
-        
-    }
 
     private void initializationViews(){
         backButton = findViewById(R.id.backNow);
@@ -205,7 +199,8 @@ private SearchView searchBar;
                 ArrayList<CarCardModel> filteredList = new ArrayList<>();
                 for (CarCardModel item: carCardModel){
                     if (item.getOwnerName().toLowerCase().contains(newText.toLowerCase()) ||
-                            item.getCarModel().toLowerCase().contains(newText.toLowerCase()) ){
+                            item.getCarModel().toLowerCase().contains(newText.toLowerCase()) ||
+                            item.getRoute().toLowerCase().contains(newText.toLowerCase())){
                         filteredList.add(item);
                     }
                 }
@@ -234,7 +229,33 @@ private SearchView searchBar;
         });
 
     }
-    private void profileUser() {
+
+
+
+        private void fetchData() {
+            FirebaseDatabase.getInstance().getReference("carDetails")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            carCardModel.clear();
+                            for (DataSnapshot dbSnapshot: snapshot.getChildren()){
+                                CarCardModel cardModel = dbSnapshot.getValue(CarCardModel.class);
+                                carCardModel.add(cardModel);
+
+                            }
+                            // Notify adapter after adding data
+                            carAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e(TAG, "Database error: " + error.getMessage());
+                        }
+                    });
+        }
+
+
+        private void profileUser() {
         startActivity(new Intent(getApplicationContext(), profile.class));
     }
 

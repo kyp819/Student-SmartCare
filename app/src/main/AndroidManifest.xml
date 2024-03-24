@@ -18,7 +18,7 @@
         android:theme="@style/Theme.StudentSmartCare"
         tools:targetApi="31">
         <activity
-            android:name="feedback.updateFeedback"
+            android:name="feedback.updateFeedBack"
             android:exported="false" />
         <activity
             android:name=".editProfile"
