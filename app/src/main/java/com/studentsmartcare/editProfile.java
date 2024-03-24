@@ -64,7 +64,7 @@ updateButton.setOnClickListener(new View.OnClickListener() {
              phoneEdit.getText().toString().isEmpty()){
             return;
         }
-
+//...................
         String email = emailEdit.getText().toString();
         fbUser.verifyBeforeUpdateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -108,7 +108,17 @@ Toast.makeText(editProfile.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
 
 });
+//
 
+cancelButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(getApplicationContext(), profile.class));
+        finish();
+
+    }
+});
+//
 
 cancelButton.setOnClickListener(new View.OnClickListener() {
     @Override
